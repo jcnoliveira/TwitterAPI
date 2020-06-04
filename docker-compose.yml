@@ -1,0 +1,29 @@
+version: '1'
+services:
+    
+    mysql:
+        image: mysql:5.7
+        container_name: mysql
+        networks: 
+            - production-network
+        command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+        environment:
+            - MYSQL_ROOT_PASSWORD=123456
+    api1:
+        build:
+            dockerfile: ./docker/python.dockerfile
+            context: .
+        image: python/api1
+        container_name: api1
+        ports:
+            - "3000"
+        networks: 
+            - production-network
+        depends_on:
+            - "mysql"
+
+
+
+networks: 
+    production-network:
+        driver: bridge
