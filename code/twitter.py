@@ -36,10 +36,17 @@ def procura_hashtag():
     msgs = []
     msg =[]
 
-    for tweet in tweepy.Cursor(api.search, q='#devops', rpp=100, tweet_mode='extended', result_type='recent').items(1):
+    for tweet in tweepy.Cursor(api.search, 
+                               q='#devops', 
+                               rpp=100, 
+                               tweet_mode='extended', 
+                               result_type='recent',
+                               max_id='1268763866881830913' ).items(1):
         print(tweet)
         msg = [tweet.full_text, tweet.user.screen_name, tweet.user.name, tweet.user.id, tweet.user.followers_count, tweet.user.location, tweet.source, tweet.source_url] 
-        print(tweet)
+        ## aplicar busca em lote
+        ## aplicar https://stackoverflow.com/questions/3437059/does-python-have-a-string-contains-substring-method
+        ## Só apendar no df se hashtag estiver no fulltext e não no retweet
         msg = tuple(msg)                    
         msgs.append(msg)
 
