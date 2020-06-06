@@ -20,7 +20,7 @@ auth.set_access_token('1243273842845454338-OQhmg52U32DTMbtaj6sb1mc3Yu4uHm',
 api = tweepy.API(auth)
 
 # obtém tweets de um dado usuário
-def obter_tweets_usuario(usuario, limite=10):
+def obter_tweets_usuario(usuario, limite=50):
 	resultados = api.user_timeline(screen_name=usuario, count=limite, tweet_mode='extended')
 	tweets = [] # lista de tweets inicialmente vazia
 	for r in resultados:
@@ -31,25 +31,25 @@ def obter_tweets_usuario(usuario, limite=10):
 		tweets.append(tweet.replace('\n', ' ')) # adiciona na lista
 	return tweets # retorna a lista de tweets
 
-def procura_hashtag():
-    df = pd.DataFrame(columns=['text', 'source', 'url'])
+def procura_hashtag(hashtag, quantidade_procura=100 ):
+    df = pd.DataFrame(columns=['tweet_id', 'date', 'text', 'username', 'name', 'user_id', 'followers_count', 'location', 'source', 'source_url' ])
     msgs = []
     msg =[]
-
+    search_string = hashtag + ' -filter:retweets'
     for tweet in tweepy.Cursor(api.search, 
-                               q='#devops', 
-                               rpp=100, 
-                               tweet_mode='extended', 
-                               result_type='recent',
-                               max_id='1268763866881830913' ).items(1):
-        print(tweet)
-        msg = [tweet.full_text, tweet.user.screen_name, tweet.user.name, tweet.user.id, tweet.user.followers_count, tweet.user.location, tweet.source, tweet.source_url] 
-        ## aplicar busca em lote
-        ## aplicar https://stackoverflow.com/questions/3437059/does-python-have-a-string-contains-substring-method
-        ## Só apendar no df se hashtag estiver no fulltext e não no retweet
-        msg = tuple(msg)                    
-        msgs.append(msg)
+                            q=str(search_string), 
+                            rpp=100, 
+                            tweet_mode='extended', 
+                            result_type='recent').items(quantidade_procura):
+        print(tweet.full_text)
+        print("===============================[")
+        if hashtag in tweet.full_text: 
+            msg = [tweet.id, tweet.created_at, tweet.full_text, tweet.user.screen_name, tweet.user.name, tweet.user.id, tweet.user.followers_count, tweet.user.location, tweet.source, tweet.source_url] 
+            msg = tuple(msg)                    
+            msgs.append(msg)
 
+
+        
     df = pd.DataFrame(msgs)
     return df
 
@@ -59,7 +59,12 @@ def procura_hashtag():
 #with open('tweets.txt', 'w') as f:
 #	f.write('\n'.join(tweets))
 
-data = procura_hashtag()
+
+hashtags = ["#openbanking", "#remediation", "#devops", "#sre", "#microservices", "#observability", "#oauth", "#metrics", "#logmonitoring", "#opentracing"]
+for x in hashtags:
+    data = procura_hashtag(x)
+
+data.columns = ['tweet_id', 'date', 'text', 'username', 'name', 'user_id', 'followers_count', 'location', 'source', 'source_url' ]
 print(data)
 print(data.dtypes)
 print(data.columns.values) 
