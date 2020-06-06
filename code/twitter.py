@@ -31,8 +31,19 @@ def obter_tweets_usuario(usuario, limite=50):
 		tweets.append(tweet.replace('\n', ' ')) # adiciona na lista
 	return tweets # retorna a lista de tweets
 
-def procura_hashtag(hashtag, quantidade_procura=100 ):
-    df = pd.DataFrame(columns=['tweet_id', 'date', 'text', 'username', 'name', 'user_id', 'followers_count', 'location', 'source', 'source_url' ])
+def procura_hashtag(hashtag, quantidade_procura=1 ):
+    df = pd.DataFrame(columns=['tweet_id', 
+                               'hashtag', 
+                               'date', 
+                               'text', 
+                               'username', 
+                               'name', 
+                               'user_id', 
+                               'followers_count', 
+                               'location', 
+                               'source', 
+                               'source_url', 
+                               'lang'])
     msgs = []
     msg =[]
     search_string = hashtag + ' -filter:retweets'
@@ -42,11 +53,23 @@ def procura_hashtag(hashtag, quantidade_procura=100 ):
                             tweet_mode='extended', 
                             result_type='recent').items(quantidade_procura):
         print(tweet.full_text)
+        print(tweet.lang)
         print("===============================[")
-        if hashtag in tweet.full_text: 
-            msg = [tweet.id, tweet.created_at, tweet.full_text, tweet.user.screen_name, tweet.user.name, tweet.user.id, tweet.user.followers_count, tweet.user.location, tweet.source, tweet.source_url] 
-            msg = tuple(msg)                    
-            msgs.append(msg)
+        #if hashtag in tweet.full_text: 
+        msg = [tweet.id, 
+                hashtag, 
+                tweet.created_at, 
+                tweet.full_text, 
+                tweet.user.screen_name, 
+                tweet.user.name, 
+                tweet.user.id, 
+                tweet.user.followers_count, 
+                tweet.user.location, 
+                tweet.source, 
+                tweet.source_url, 
+                tweet.lang] 
+        msg = tuple(msg)                    
+        msgs.append(msg)
 
 
         
@@ -60,11 +83,31 @@ def procura_hashtag(hashtag, quantidade_procura=100 ):
 #	f.write('\n'.join(tweets))
 
 
-hashtags = ["#openbanking", "#remediation", "#devops", "#sre", "#microservices", "#observability", "#oauth", "#metrics", "#logmonitoring", "#opentracing"]
+hashtags = ["#openbanking", 
+            "#remediation", 
+            "#devops", 
+            "#sre", 
+            "#microservices", 
+            "#observability", 
+            "#oauth", 
+            "#metrics", 
+            "#logmonitoring", 
+            "#opentracing"]
 for x in hashtags:
     data = procura_hashtag(x)
-
-data.columns = ['tweet_id', 'date', 'text', 'username', 'name', 'user_id', 'followers_count', 'location', 'source', 'source_url' ]
+print(data)
+data.columns = ['tweet_id', 
+                'hashtag', 
+                'date', 
+                'text', 
+                'username', 
+                'name', 
+                'user_id', 
+                'followers_count', 
+                'location', 
+                'source', 
+                'source_url', 
+                'lang']
 print(data)
 print(data.dtypes)
 print(data.columns.values) 
