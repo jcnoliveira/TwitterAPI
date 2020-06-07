@@ -1,6 +1,81 @@
-version: '3'
+version: '2.2'
 services:
     
+    es01:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+        container_name: es01
+        environment:
+            - node.name=es01
+            - cluster.name=es-docker-cluster
+#            - discovery.seed_hosts=es02,es03
+#            - cluster.initial_master_nodes=es01,es02,es03
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - "discovery.type=single-node"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+#        volumes:
+#            - data01:/usr/share/elasticsearch/data
+        ports:
+            - 9200:9200
+        networks:
+            - production-network
+
+#    es02:
+#        image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+#        container_name: es02
+#        environment:
+#            - node.name=es02
+#            - cluster.name=es-docker-cluster
+#            - discovery.seed_hosts=es01,es03
+#            - cluster.initial_master_nodes=es01,es02,es03
+#            - bootstrap.memory_lock=true
+#            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#        ulimits:
+#            memlock:
+#              soft: -1
+#              hard: -1
+#        volumes:
+#            - data02:/usr/share/elasticsearch/data
+#        ports:
+#            - 9201:9201
+#        networks:
+#            - production-network
+
+#    es03:
+#        image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+#        container_name: es03
+#        environment:
+#            - node.name=es03
+#            - cluster.name=es-docker-cluster
+#            - discovery.seed_hosts=es01,es02
+#            - cluster.initial_master_nodes=es01,es02,es03
+#            - bootstrap.memory_lock=true
+#            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#        ulimits:
+#            memlock:
+#              soft: -1
+#              hard: -1
+#        volumes:
+#            - data03:/usr/share/elasticsearch/data
+#        ports:
+#            - 9202:9202
+#        networks:
+#            - production-network
+
+    kib01:
+        image: docker.elastic.co/kibana/kibana:7.7.1
+        container_name: kib01
+        ports:
+            - 5601:5601
+        environment:
+            ELASTICSEARCH_URL: http://es01:9200
+            ELASTICSEARCH_HOSTS: http://es01:9200
+        networks:
+            - production-network
+
     mysql:
         image: mysql:5.7
         container_name: mysql
@@ -11,18 +86,6 @@ services:
             - "3306:3306"
         environment:
             - MYSQL_ROOT_PASSWORD=123456
-    api1:
-        build:
-            dockerfile: ./docker/python.dockerfile
-            context: .
-        image: python/api1
-        container_name: api1
-        ports:
-            - "3000"
-        networks: 
-            - production-network
-        depends_on:
-            - "mysql"
     phpmyadmin:
         build:
             dockerfile: ./docker/python.dockerfile
@@ -38,55 +101,16 @@ services:
         depends_on:
             - "mysql"
 
-# MongoDB: https://hub.docker.com/_/mongo/
-    mongo:
-        image: mongo:3
-        networks: 
-            - production-network
-  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docker.html
-    elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.5
-        environment:
-            - http.host=0.0.0.0
-            - transport.host=localhost
-            - network.host=0.0.0.0
-            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-        deploy:
-            resources:
-                limits:
-                    memory: 1g
-        networks: 
-            - production-network
-    # Graylog: https://hub.docker.com/r/graylog/graylog/
-    graylog:
-        image: graylog/graylog:3.2
-        environment:
-            # CHANGE ME (must be at least 16 characters)!
-            - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
-            # Password: admin
-            - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-            - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
-        networks: 
-            - production-network
-        depends_on:
-            - mongo
-            - elasticsearch
-        ports:
-            # Graylog web interface and REST API
-            - "9000:9000"
-            # Syslog TCP
-            - "1514:1514"
-            # Syslog UDP
-            - "1514:1514/udp"
-            # GELF TCP
-            - "12201:12201"
-            # GELF UDP
-            - "12201:12201/udp"
 
-networks: 
+
+volumes:
+    data01:
+        driver: local
+    data02:
+        driver: local
+    data03:
+        driver: local
+
+networks:
     production-network:
         driver: bridge

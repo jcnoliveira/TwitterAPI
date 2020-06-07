@@ -1,10 +1,14 @@
 # acessar https://apps.twitter.com para criar uma nova aplicação
 # cada aplicação tem suas próprias chaves
-
-import tweepy
-import re
+from cmreslogging.handlers import CMRESHandler
 import pandas as pd
+import logging
+import tweepy
+import sys
+import re
 import os
+
+
 
 # acessar a aba "Keys and Access Tokens"
 # passa o Consumer Key e o Consumer Secret
@@ -33,17 +37,17 @@ def obter_tweets_usuario(usuario, limite=50):
 
 def procura_hashtag(hashtag, quantidade_procura=1 ):
     df = pd.DataFrame(columns=['tweet_id', 
-                               'hashtag', 
-                               'date', 
-                               'text', 
-                               'username', 
-                               'name', 
-                               'user_id', 
-                               'followers_count', 
-                               'location', 
-                               'source', 
-                               'source_url', 
-                               'lang'])
+                            'hashtag', 
+                            'date', 
+                            'text', 
+                            'username', 
+                            'name', 
+                            'user_id', 
+                            'followers_count', 
+                            'location', 
+                            'source', 
+                            'source_url', 
+                            'lang'])
     msgs = []
     msg =[]
     search_string = hashtag + ' -filter:retweets'
@@ -55,7 +59,6 @@ def procura_hashtag(hashtag, quantidade_procura=1 ):
         print(tweet.full_text)
         print(tweet.lang)
         print("===============================[")
-        #if hashtag in tweet.full_text: 
         msg = [tweet.id, 
                 hashtag, 
                 tweet.created_at, 
@@ -73,7 +76,10 @@ def procura_hashtag(hashtag, quantidade_procura=1 ):
 
 
         
-    df = pd.DataFrame(msgs)
+    df = pd.DataFrame(list(msgs))
+    print('------------------------------------------')
+    print(msgs)
+    print(df)
     return df
 
 
@@ -94,8 +100,20 @@ hashtags = ["#openbanking",
             "#logmonitoring", 
             "#opentracing"]
 for x in hashtags:
-    data = procura_hashtag(x)
-print(data)
+    data = pd.DataFrame(columns=['tweet_id', 
+                            'hashtag', 
+                            'date', 
+                            'text', 
+                            'username', 
+                            'name', 
+                            'user_id', 
+                            'followers_count', 
+                            'location', 
+                            'source', 
+                            'source_url', 
+                            'lang'])   
+    data.append(procura_hashtag(x))
+
 data.columns = ['tweet_id', 
                 'hashtag', 
                 'date', 
