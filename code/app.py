@@ -54,4 +54,4 @@ def search():
 
     return jsonify(res['hits']['hits'])
 
-#app.run(port=8090, debug=True)
+app.run(port=8090, debug=True)

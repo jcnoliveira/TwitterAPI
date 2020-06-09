@@ -7,6 +7,7 @@ import pandas as pd
 import logging
 import tweepy
 import json
+import conn
 import sys
 import re
 import os
@@ -20,55 +21,53 @@ def autentica_twitter():
 
 
 def procura_hashtag(api, hashtag, mongo, quantidade_procura=100 ):
+    print(hashtag)
     for tweet in tweepy.Cursor(api.search, 
-                            q=str(hashtag + ' -filter:retweets'), 
-                            rpp=100, 
-                            tweet_mode='extended', 
-                            result_type='recent').items(quantidade_procura):
-        msg = {"id"              : tweet.id, 
-               "hashtag"         : hashtag, 
-               "created_at"      : tweet.created_at, 
-               "full_text"       : tweet.full_text, 
-               "username"        : tweet.user.screen_name, 
-               "name"            : tweet.user.name, 
-               "user_id"         : tweet.user.id, 
-               "followers_count" : tweet.user.followers_count, 
-               "location"        : tweet.user.location, 
-               "source"          : tweet.source, 
-               "source_url"      : tweet.source_url, 
-               "lang"            : tweet.lang}
+                               q=str(hashtag + ' -filter:retweets'), 
+                               rpp=100, 
+                               tweet_mode='extended', 
+                               result_type='recent').items(quantidade_procura):
+        #date = datetime.datetime.strptime(string, "%d %b %Y  %H:%M:%S.%f")
+        date = tweet.created_at
+        print(tweet)
+        msg = {"id"                 : tweet.id, 
+               "hashtag"            : hashtag, 
+               "created_at_year"    : date.year,
+               "created_at_month"   : date.month,
+               "created_at_day"     : date.day,
+               "created_at_hour"    : date.hour,
+               "created_at_minute"  : date.minute,
+               "full_text"          : tweet.full_text, 
+               "username"           : tweet.user.screen_name, 
+               "name"               : tweet.user.name, 
+               "user_id"            : tweet.user.id, 
+               "followers_count"    : tweet.user.followers_count, 
+               "location"           : tweet.user.location, 
+               "source"             : tweet.source, 
+               "source_url"         : tweet.source_url, 
+               "lang"               : tweet.lang}
         
-        grava_dados(msg, mongo)
+        conn.grava_dados(msg, mongo)
+        print(msg)
+    
     return msg
-
-
-def cria_conexao_mongo(host='localhost', port=27017, username='root', password='example'): 
-    cliente = MongoClient(host, port, username, password)
-    banco = cliente['twitter']
-    return banco['tweets']
-
-
-def grava_dados(data, mongo):
-    result = mongo.insert_one(data).inserted_id
-    print("linha inserida: " + str(result))
 
 
 def busca_hashtag(hashtag):
     for x in hashtags:
-       procura_hashtag(x, cria_conexao_mongo(), autentica_twitter())
-
+       procura_hashtag(autentica_twitter(), x, conn.cria_conexao_mongo())
 
 
 
 if __name__ == "__main__":
-    hashtags = ["#openbanking", 
-                "#remediation",
-                "#devops", 
-                "#sre", 
-                "#microservices"]#,
-                #"#observability", 
-                #"#oauth", 
-                #"#metrics", 
-                #"#logmonitoring", 
-                #"#opentracing"]
+    hashtags = ["#openbanking"]#, 
+#                "#remediation",
+#                "#devops", 
+#                "#sre", 
+#                "#microservices",
+#                "#observability", 
+#                "#oauth", 
+#                "#metrics", 
+#                "#logmonitoring", 
+#                "#opentracing"]
     busca_hashtag(hashtags)
