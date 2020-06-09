@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 # Copia .Jar para dentro da imagem
-# COPY . /opt/java
+COPY docker/ /opt/python
 
 # Define a diretorio que será usado como referencia no EntryPoint
 WORKDIR /opt/python
@@ -22,10 +22,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get install python3 python3-pip groff  -y
 
 # Instala bibliotecas Python
-RUN pip3 install awscli && \
-    pip3 install boto3 && \
-    pip3 install pymysql && \
-    pip3 install mysql-connector-python 
+RUN pip3 install -r requirements
 
 # Limpeza de arquivos de instalação
 RUN apt-get autoclean && \
@@ -33,8 +30,6 @@ RUN apt-get autoclean && \
 
 ####################################
 RUN apt-get install nano -y && \
-    apt-get install curl -y && \
-    mkdir log && \
-    touch log/teste.txt
+    apt-get install curl -y
 
 # ENTRYPOINT python3 teste_script.py

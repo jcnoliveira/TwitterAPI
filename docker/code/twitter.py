@@ -8,16 +8,10 @@ import logging
 import tweepy
 import json
 import conn
+import key
 import sys
 import re
 import os
-
-def autentica_twitter():
-    auth = tweepy.OAuthHandler('PnDbc1eIqAnsDqS8yNWIKMRls', 
-                            'CEJuw59mJ3hZOgoARS2Z8GT6OhBnnxlylkNzDKx8rXMpjXWu2e')
-    auth.set_access_token('1243273842845454338-OQhmg52U32DTMbtaj6sb1mc3Yu4uHm',
-                        'KOwORproGuGFrREs5jlIebq4jzZsRRu7VrJ7ZgQO0smpD')
-    return tweepy.API(auth)
 
 
 def procura_hashtag(api, hashtag, mongo, quantidade_procura=100 ):
@@ -53,21 +47,18 @@ def procura_hashtag(api, hashtag, mongo, quantidade_procura=100 ):
     return msg
 
 
-def busca_hashtag(hashtag):
+def busca_hashtag():
+    hashtags = ["#openbanking", 
+                "#remediation",
+                "#devops", 
+                "#sre", 
+                "#microservices",
+                "#observability", 
+                "#oauth", 
+                "#metrics", 
+                "#logmonitoring", 
+                "#opentracing"]
     for x in hashtags:
-       procura_hashtag(autentica_twitter(), x, conn.cria_conexao_mongo())
+       procura_hashtag(key.autentica_twitter(), x, conn.cria_conexao_mongo())
 
 
-
-if __name__ == "__main__":
-    hashtags = ["#openbanking"]#, 
-#                "#remediation",
-#                "#devops", 
-#                "#sre", 
-#                "#microservices",
-#                "#observability", 
-#                "#oauth", 
-#                "#metrics", 
-#                "#logmonitoring", 
-#                "#opentracing"]
-    busca_hashtag(hashtags)

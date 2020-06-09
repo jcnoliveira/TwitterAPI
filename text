@@ -1,0 +1,32 @@
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+docker run --name phpmyadmin -d --link mysql:db -p 8081:80 phpmyadmin/phpmyadmin
+
+
+docker-compose up -d
+docker-compose kill
+
+#consumer twitter
+API key: PnDbc1eIqAnsDqS8yNWIKMRls
+API secret key: CEJuw59mJ3hZOgoARS2Z8GT6OhBnnxlylkNzDKx8rXMpjXWu2e
+
+Access token : 1243273842845454338-OQhmg52U32DTMbtaj6sb1mc3Yu4uHm
+Access token secret : KOwORproGuGFrREs5jlIebq4jzZsRRu7VrJ7ZgQO0smpD
+
+
+
+
+https://dev.to/aligoren/using-elasticsearch-with-python-and-flask-2i0e
+https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html
+
+ curl -X GET "localhost:9200/_cat/nodes?v&pretty"
+
+
+##Django
+Username (leave blank to use 'julionascimento'): 
+Email address: jcn.oliveira@outlook.com
+Password: 123456 
+
+
+https://medium.com/sipios/get-started-to-monitor-your-django-application-with-prometheus-grafana-in-10-minutes-dac9c0fdcf58
+https://medium.com/@nelziositoe/introducao-ao-django-rest-framework-47ecb9ae0e6b

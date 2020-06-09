@@ -1,13 +1,15 @@
 from flask import Flask, jsonify, request
-import json
-import conn
+from bson.json_util import dumps
+from datetime import datetime
 import logging_es
 import twitter
-from bson.json_util import dumps
+import json
+import conn
+
 app = Flask(__name__)
 
 
-
+##https://pypi.org/project/flask-prometheus-metrics/
 
 @app.route('/hello/', methods=['GET', 'POST'])
 def welcome():
@@ -30,23 +32,39 @@ def hello2():
 
 
 
-@app.route('/top5/', methods=['GET'])
+@app.route('/relatorio/top5/', methods=['GET'])
 def top5():
     mongo = conn.cria_conexao_mongo()
     result = conn.busca_top5(mongo)
     return dumps(result), 200  
 
-@app.route('/tweetporhora/', methods=['GET'])
+@app.route('/relatorio/tweetporhora/', methods=['GET'])
 def tweetporhora():
     mongo = conn.cria_conexao_mongo()
     result = conn.busca_porhora(mongo)
     return dumps(result), 200  
 
-@app.route('/hashtagbycountry/', methods=['GET'])
+@app.route('/relatorio/hashtagbycountry/', methods=['GET'])
 def hashtagbycountry():
     mongo = conn.cria_conexao_mongo()
     result = conn.busca_hashtagbycountry2(mongo)
     return dumps(result), 200  
+
+@app.route('/buscatweets', methods=['POST'])
+def insert_data():
+    #slug = request.form['slug']
+    #title = request.form['title']
+    #content = request.form['content']
+
+    twitter.busca_hashtag()
+    body = {
+        'jobStatus': 'iniciado',
+        'statusCode': 200,
+        'timestamp': datetime.now()
+    }
+
+    return jsonify(body), 200
+
 
 @app.route('/contact')
 def contact():
