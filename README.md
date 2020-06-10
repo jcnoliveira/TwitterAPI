@@ -71,9 +71,12 @@ Servidor de vizualização de metricas do Prometheus [Nao finalizado]
 
 O microserviço desse projeto está configurado para responder na seguinte URL
 
+
     ```
     http://localhost:5050
     ```
+
+Na pasta "postman/" deste projeto você encontrará um arquivo json que pode ser importado para o seu Postman
 
 Abaixo detalharemos a função de cada método desse serviço.
 
@@ -160,3 +163,37 @@ Em caso de sucesso, o seguinte retorno será devolvido:
 ![buscatweet](https://github.com/jcnoliveira/TwitterAPI/blob/master/recursos/top.png)
 
 ## Logs
+
+Para realizar a parte de logging estou utilizando uma stack elastic.
+Abaixo temos duas queries basicas para filtrar dados e seus respectivos comandos curl
+
+As queries podem ser testadas no kibana, através do link
+    ```
+    http://localhost:5601/app/kibana#/dev_tools/console
+    ```
+
+    ```
+    GET /_search
+    {
+    "query": {
+        "query_string": {
+        "query": "INFO",
+        "default_field": "levelname"
+        }
+    }
+    }
+    curl -XGET "http://es01:9200/_search" -H 'Content-Type: application/json' -d'{  "query": {    "query_string": {      "query": "INFO",      "default_field": "levelname"    }  }}'
+    ```
+
+    ```
+    GET /_search
+    {
+    "query": {
+        "query_string": {
+        "query": "ERROR",
+        "default_field": "levelname"
+        }
+    }
+    }
+    curl -XGET "http://es01:9200/_search" -H 'Content-Type: application/json' -d'{  "query": {    "query_string": {      "query": "ERROR",      "default_field": "levelname"    }  }}'
+    ```

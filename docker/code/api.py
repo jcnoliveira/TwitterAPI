@@ -13,27 +13,30 @@ app = Flask(__name__)
 
 @app.route('/relatorio/top5/', methods=['GET'])
 def top5():
-    mongo = conn.cria_conexao_mongo()
-    result = conn.busca_top5(mongo)
+    try:
+        mongo = conn.cria_conexao_mongo()   
+        result = conn.busca_top5(mongo)
+        logging_es.send_log('/relatorio/top5/ methods=[GET])')
+    except:
+        logging_es.send_log('api.py /relatorio/top5/ mongo get values error','error')
     followers_count = {}
     username = {}
     i = 0
-    for doc in result:
-        followers_count[i] = doc['followers_count']
-        username[i] = doc['username']
-        i = i + 1
-
-    # a bit of modification to get the items list of dictionaries:
-    keys = ['username', 'followers_count']
-    items = [dict(zip(keys, [u, t])) for u, t in zip(username.values(), followers_count.values())]
-
-    # create the output dict
+    try:
+        for doc in result:
+            followers_count[i] = doc['followers_count']
+            username[i] = doc['username']
+            i = i + 1
+        # a bit of modification to get the items list of dictionaries:
+        keys = ['username', 'followers_count']
+        items = [dict(zip(keys, [u, t])) for u, t in zip(username.values(), followers_count.values())]
+    except:
+        result = {"return" : "error"}
+        logging_es.send_log('api.py /relatorio/top5/ build json error','error')
     d = {
         'Query': 'followers_count',
         'items': items
         }
-
-    # make a pretty json string from the dict
     d = json.dumps(d, indent=4)
     print(d)
     return d, 200
@@ -41,37 +44,45 @@ def top5():
 
 @app.route('/relatorio/tweetbyhour/', methods=['GET'])
 def tweetporhora():
-    mongo = conn.cria_conexao_mongo()
-    result = conn.busca_porhora(mongo)
+    try:
+        mongo = conn.cria_conexao_mongo()
+        result = conn.busca_porhora(mongo)
+        logging_es.send_log('/relatorio/tweetbyhour/, methods=[GET])')
+    except:
+        result = {"return" : "error"}
+        logging_es.send_log('api.py /relatorio/tweetbyhour/ mongo get values error','error')
     d = {
     'Query': 'tweets_by_hour',
     'items': dumps(result)
     }
-    # make a pretty json string from the dict
-    #d = json.dumps(d, indent=4)
     return d
-    #return dumps(result), 200  
+
 
 @app.route('/relatorio/tweetsbycountry/', methods=['GET'])
 def hashtagbycountry():
-    mongo = conn.cria_conexao_mongo()
-    result = conn.busca_hashtagbycountry(mongo)
+    try:
+        mongo = conn.cria_conexao_mongo()
+        result = conn.busca_hashtagbycountry(mongo)
+        logging_es.send_log('/relatorio/tweetsbycountry/ methods=[GET])')
+    except:
+        result = {"return" : "error"}
+        logging_es.send_log('api.py /relatorio/tweetsbycountry/ mongo get values error','error')
     d = {
     'Query': 'tweets_by_country',
     'items': dumps(result)
     }
-    # make a pretty json string from the dict
-    #d = json.dumps(d, indent=4)
     return d
-    # return dumps(result), 200  
+
 
 @app.route('/buscatweets', methods=['POST'])
 def insert_data():
-    #slug = request.form['slug']
-    #title = request.form['title']
-    #content = request.form['content']
+    try:
+        twitter.busca_hashtag()
+        logging_es.send_log('/buscatweets methods=[POST])')
+    except:
+        logging_es.send_log('api.py /buscatweets mongo get values error','error')
+    
 
-    twitter.busca_hashtag()
     body = {
         'jobStatus': 'done',
         'statusCode': 200,
