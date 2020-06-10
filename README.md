@@ -172,6 +172,8 @@ As queries podem ser testadas no kibana, através do link
     http://localhost:5601/app/kibana#/dev_tools/console
     ```
 
+Exemplo de query e comando curl para buscar logs do tipo INFO
+
     ```
     GET /_search
     {
@@ -185,6 +187,8 @@ As queries podem ser testadas no kibana, através do link
     curl -XGET "http://es01:9200/_search" -H 'Content-Type: application/json' -d'{  "query": {    "query_string": {      "query": "INFO",      "default_field": "levelname"    }  }}'
     ```
 
+Exemplo de query e comando curl para buscar logs do tipo ERROR
+
     ```
     GET /_search
     {
@@ -197,3 +201,7 @@ As queries podem ser testadas no kibana, através do link
     }
     curl -XGET "http://es01:9200/_search" -H 'Content-Type: application/json' -d'{  "query": {    "query_string": {      "query": "ERROR",      "default_field": "levelname"    }  }}'
     ```
+
+Após acessar a url do kibana, urilize uma das queries acima. O resultado deve ser conforme o print abaixo.
+
+![kibana](https://github.com/jcnoliveira/TwitterAPI/blob/master/recursos/kibana.png)
