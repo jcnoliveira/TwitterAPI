@@ -79,6 +79,9 @@ def insert_data():
     }
     return jsonify(body), 200
 
+@app.route('/', methods=['GET'])
+def index():
+        return 'Saiba mais em https://github.com/jcnoliveira/TwitterAPI'
 
 
 if __name__ == '__main__':
