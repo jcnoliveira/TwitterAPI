@@ -1,0 +1,72 @@
+{
+	"variables": [],
+	"info": {
+		"name": "twitter",
+		"_postman_id": "db481808-3b31-990d-7dbe-8dea329f4e38",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"description": "",
+			"item": [
+				{
+					"name": "Tweets por Hora",
+					"request": {
+						"url": "localhost:5050/relatorio/tweetbyhour/",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Tweets por Pais e Assunto",
+					"request": {
+						"url": "localhost:5050/relatorio/tweetsbycountry/",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Top 5 Usuários Populares",
+					"request": {
+						"url": "localhost:5050/relatorio/top5/",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"description": "",
+			"item": [
+				{
+					"name": "Busca Tweets",
+					"request": {
+						"url": "localhost:5050/buscatweets",
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"description": "",
+			"item": []
+		}
+	]
+}

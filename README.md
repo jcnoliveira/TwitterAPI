@@ -3,7 +3,7 @@
 Essa é uma aplicação que obtem dados do twitter e armazena as informações em um banco de dados.
 
 ## Documentação de arquitetura
-![ECR Repo](https://github.com/jcnoliveira/TwitterAPI/blob/master/recursos/componetes.png)
+![Arquitetura](https://github.com/jcnoliveira/TwitterAPI/blob/master/recursos/componetes.png)
 
 
 
@@ -36,4 +36,30 @@ Essa é uma aplicação que obtem dados do twitter e armazena as informações e
 
 ## Documentação das APIs
 
+O microserviço desse projeto está configurado para responder na seguinte URL
+    ```
+    http://localhost:5050
+
+    ```
+Abaixo detalharemos a função de cada método desse serviço.
+
+### POST
+
+1. /buscatweets
+Esse recurso, utilizando o método POST, é responsabel por carregar dos dados no MongoDB de acordo com as Hashtags do projeto.
+A url é:
+    ```
+    http://localhost:5050/buscatweets
+
+    ```
+Em caso de sucesso, o seguinte retorno será devolvido:
+
+    ```
+    {
+        "jobStatus": "done",
+        "statusCode": 200,
+        "timestamp": "Wed, 10 Jun 2020 02:50:09 GMT"
+    }
+    ```
+![Arquitetura](https://github.com/jcnoliveira/TwitterAPI/blob/master/recursos/buscatweet.png)
 ## Logs

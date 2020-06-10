@@ -45,7 +45,7 @@ def tweetporhora():
     result = conn.busca_porhora(mongo)
     d = {
     'Query': 'tweets_by_hour',
-    'items': dumps(result)
+    'items': dumps(result).replace('\\"', '"')
     }
     # make a pretty json string from the dict
     d = json.dumps(d, indent=4)
@@ -58,7 +58,7 @@ def hashtagbycountry():
     result = conn.busca_hashtagbycountry(mongo)
     d = {
     'Query': 'tweets_by_country',
-    'items': dumps(result)
+    'items': dumps(result).replace('\\"', '"')
     }
     # make a pretty json string from the dict
     d = json.dumps(d, indent=4)
