@@ -5,6 +5,27 @@ Essa é uma aplicação que obtem dados do twitter e armazena as informações e
 ## Documentação de arquitetura
 ![Arquitetura](https://github.com/jcnoliveira/TwitterAPI/blob/master/recursos/componetes.png)
 
+1. Flask API - http://localhost:5050
+    API desenvolvida em Python com flask. Roda em cima de um container dorcker.
+
+2. MongoDB - localhost:27017
+    MongoDB, utilizado como banco NoSQL para armazenar e resgatar informações do projeto.
+
+3. Mongo Express - http://localhost:8081
+    IDE Mongo Web que pode ser acessada vara verificar informações armazenadas.
+
+4. Elasticsearch - http://localhost:9200/
+    Servidor elasticsearch utilizado para armazenamento de logs do projeto.
+
+5. Kibana - http://localhost:5601/
+    Servidor kibana utilizado para vizualizar os logs de forma amigavel.
+
+6. Prometheus - localhost:9090
+    Servidor aplicado armazenar metricas de execução [Não finalizado]
+
+7. Grafana - http://localhost:3060/
+    Servidor de vizualização de metricas do Prometheus [Nao finalizado]
+
 
 
 
@@ -37,7 +58,6 @@ Essa é uma aplicação que obtem dados do twitter e armazena as informações e
 ## Documentação das APIs
 
 O microserviço desse projeto está configurado para responder na seguinte URL
-
     ```
     http://localhost:5050
     ```
@@ -45,7 +65,7 @@ Abaixo detalharemos a função de cada método desse serviço.
 
 ### POST
 
-1. /buscatweets
+1. Busca tweets - /buscatweets
 Esse recurso, utilizando o método POST, é responsabel por carregar dos dados no MongoDB de acordo com as Hashtags do projeto.
 A url é:
     ```
@@ -65,6 +85,10 @@ Em caso de sucesso, o seguinte retorno será devolvido:
 
 ### Get
 
+1. Tweets por Hora - /relatorio/tweetbyhour/
 
+2. Tweets por Pais e Assunto - /relatorio/tweetsbycountry/
+
+4. Top 5 Usuários Populares - /relatorio/top5/
 
 ## Logs
