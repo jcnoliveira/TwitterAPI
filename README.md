@@ -37,9 +37,9 @@ Essa é uma aplicação que obtem dados do twitter e armazena as informações e
 ## Documentação das APIs
 
 O microserviço desse projeto está configurado para responder na seguinte URL
+
     ```
     http://localhost:5050
-
     ```
 Abaixo detalharemos a função de cada método desse serviço.
 
@@ -50,7 +50,6 @@ Esse recurso, utilizando o método POST, é responsabel por carregar dos dados n
 A url é:
     ```
     http://localhost:5050/buscatweets
-
     ```
 Em caso de sucesso, o seguinte retorno será devolvido:
 
@@ -62,4 +61,10 @@ Em caso de sucesso, o seguinte retorno será devolvido:
     }
     ```
 ![Arquitetura](https://github.com/jcnoliveira/TwitterAPI/blob/master/recursos/buscatweet.png)
+
+
+### Get
+
+
+
 ## Logs
