@@ -11,7 +11,7 @@ import re
 import os
 
 
-def cria_conexao_mongo(host='localhost', port=27017, username='root', password='example'): 
+def cria_conexao_mongo(host='mongo', port=27017, username='root', password='example'): 
 #def cria_conexao_mongo():
     cliente = MongoClient(host,
                           port=port,
@@ -37,17 +37,9 @@ def busca_porhora(mongo):
         {"$sort": {"soma": -1}}
         ])
 
+
+
 def busca_hashtagbycountry(mongo):
-    return mongo.aggregate([
-        {"$group": 
-            { "_id": {"hashtag" : "$hashtag", "lang":"$lang"},
-                   "soma": { "$sum" : 1 } } 
-        },
-        {"$sort": {"soma": -1}}
-        ])
-
-
-def busca_hashtagbycountry2(mongo):
     return mongo.aggregate([
             {
                 "$group": {
@@ -75,25 +67,26 @@ def busca_hashtagbycountry2(mongo):
 
 
 
-#######busca_porhora
-mongo = cria_conexao_mongo()
-result = busca_hashtagbycountry2(mongo)
-
-print(result)
-for doc in result:
-    print(doc['lang'])
-    #print(doc['sum'])
-    print('\n')
-    
-
-
 
 
 
 ###### TOP 5
 #mongo = cria_conexao_mongo()
-#result = busca_top5(mongo)
-#print(result)
+#result = busca_hashtagbycountry(mongo)
+#
+#d = {
+#    'Query': 'followers_count',
+#    'items': dumps(result)
+#    }
+#
+## make a pretty json string from the dict
+#d = json.dumps(d, indent=4)
+#print(d)
+#
+
+#for x in result:
+#   print(x)
+
 #followers_count = {}
 #username = {}
 #i = 0

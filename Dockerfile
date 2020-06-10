@@ -32,4 +32,6 @@ RUN apt-get autoclean && \
 RUN apt-get install nano -y && \
     apt-get install curl -y
 
-# ENTRYPOINT python3 teste_script.py
+EXPOSE 5050
+
+ENTRYPOINT python3 code/api.py
