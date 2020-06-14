@@ -48,8 +48,8 @@ Servidor de vizualização de metricas do Prometheus [Nao finalizado]
 2. Em um repositório de sua escolha, rode o seguinte comando para fazer download do prjeto
 
     ```
-    git clone https://github.com/aws-samples/amazon-chime-sdk-recording-demo.git
-    cd amazon-chime-sdk-recording-demo
+    git clone https://github.com/jcnoliveira/TwitterAPI.git
+    cd TwitterAPI
     ```
 
 3. Para preparar o docker a partir do dockerfile do projeto, execute o seguinte comando
