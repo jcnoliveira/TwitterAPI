@@ -52,7 +52,7 @@ sqlparse==0.3.1
 texttable==1.6.2
 toml==0.10.1
 tweepy==3.8.0
-urllib3==1.25.9
+urllib3==1.26.5
 uWSGI==2.0.18
 websocket-client==0.57.0
 Werkzeug==1.0.1
